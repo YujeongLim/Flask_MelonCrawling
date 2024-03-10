@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title> </title>
+</head>
+<body>
+    <h1>Playlist Detail</h1>
+
+    <div th:if="${playlist == null}">
+        <p>Playlist not found.</p>
+    </div>
+
+    <div th:if="${playlist != null}">
+
+        <form th:action="@{/playlists/updateName/{playlistId}(playlistId=${playlist.playlistId})}" method="post">
+            <label for="playlistName">Playlist Name:</label>
+            <input type="text" id="playlistName" name="playlistName" th:value="${playlist.playlistName}">
+            <input type="submit" value="Update Name">
+        </form>
+
+        <h2 th:text="${playlist.playlistName}"></h2>
+        <ul>
+            <li th:each="song : ${songs}">
+                <p th:text="${song.title}"></p>
+                <p th:text="${song.artist}"></p>
+                <form th:action="@{'/playlists/detail/' + ${playlistId} + '/deleteSong/' + ${song.songId}}" method="post">
+                    <input type="hidden" name="songId" th:value="${song.songId}">
+                    <input type="submit" value="Delete Song">
+                </form>
+            </li>
+        </ul>
+    </div>
+
+    <div th:if="${param.successMessage}">
+        <p th:text="${param.successMessage}"></p>
+    </div>
+</body>
+</html>

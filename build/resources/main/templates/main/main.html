@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <meta charset="UTF-8">
+    <title>MUSIC</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div id="container">
+        <div id="section01">
+            <div id="header">
+                <div class="header-con clearfix">
+                    <ul class="gnb">
+                        <li><a href="#section01" style="color:#fc0260;">home</a></li>
+                        <li><a href="#section02">chart100</a></li>
+                        <li style="margin: 0"><a href="#section03">playlists</a></li>
+                    </ul>
+                    <div class="login-box">
+                        <th:block sec:authorize="isAuthenticated()">
+                            <h3 align="right">
+                                <img src="/img/login_icon.png" style="width: 30px;">
+                                <span th:text="${memberName} + '님 환영합니다.'"></span>
+                            </h3>
+                            <button class="logout-button" onclick="location.href='/member/logout'">로그아웃</button>
+                        </th:block>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="section02">
+            <div class="con clearfix">
+                <h2 class="h2_1">TOP 100</h2>
+                <h2 id="todayDate"></h2>
+            </div>
+            <div class="table-container"> <!-- 스크롤을 위한 컨테이너 추가 -->
+                <table>
+                    <thead>
+                    <tr>
+                        <th>순위</th>
+                        <th>제목</th>
+                        <th>가수</th>
+                        <th>앨범</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="melonchart : ${meloncharts}">
+                        <td th:text="${melonchart.rank}"></td>
+                        <td th:text="${melonchart.title}"></td>
+                        <td th:text="${melonchart.artist}"></td>
+                        <td th:text="${melonchart.album}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div id="section03">
+            <div class="sec3-container">
+                <div class="con">
+                    <h2>Search Songs</h2>
+                    <form id="searchSongsForm" method="get" class="mb-20">
+                        <input type="text" id="songName" name="songName" placeholder="Song Name">
+                        <button type="submit">Search</button>
+                    </form>
+                </div>
+            <!-- 검색 결과를 표시할 테이블 추가 -->
+                <div class="table-container">
+                    <table id="searchResultsTable">
+                        <thead>
+                        <tr>
+                            <th>Title</th>
+                            <th>Artist</th>
+                        </tr>
+                        </thead>
+                        <tbody id="searchResults"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="sec3-container" style="padding-top: 0;">
+                <!-- 플레이리스트 -->
+                <div id="playlistSection">
+                    <div class="con">
+                        <h2>Playlists</h2>
+                        <form id="createPlaylistForm" method="post">
+                            <input type="text" id="playlistName" name="playlistName" placeholder="Playlist Name"/>
+                            <button type="submit">Create Playlist</button>
+                        </form>
+                    </div>
+                    <div class="table-container" style="margin-bottom: 0;">
+                        <table id="playlistTable">
+                            <thead>
+                            <tr>
+                                <th>Playlist Name</th>
+                                <th>Details</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- Playlist data will be loaded here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <button id="topButton" onclick="scrollToTop()">Top</button>
+    <script>
+        function displayDate() {
+            var today = new Date();
+            var year = today.getFullYear(); // 현재 년도
+            var month = today.getMonth() + 1; // 월은 0부터 시작하므로 1을 더해줍니다.
+            var day = today.getDate(); // 현재 일
+
+            // 월과 일이 10보다 작으면 앞에 '0'을 붙여 두 자리로 만듭니다.
+            month = month < 10 ? '0' + month : month;
+            day = day < 10 ? '0' + day : day;
+
+            // YYYY-MM-DD 형식으로 날짜를 구성합니다.
+            var date = year + '-' + month + '-' + day;
+
+            // 'todayDate' id를 가진 요소에 날짜 문자열을 설정합니다.
+            document.getElementById('todayDate').innerText = date;
+        }
+        displayDate();// 페이지 로드 시 날짜를 표시합니다.
+
+        function loadMelonChart() {
+            fetch('/playlists/melonchart')
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.querySelector('#section02 tbody'); // 데이터를 삽입할 tbody 요소 선택
+                    data.forEach(item => {
+                        // 새로운 테이블 row 요소 생성
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                    <td>${item.rank}</td>
+                    <td>${item.title}</td>
+                    <td>${item.artist}</td>
+                    <td>${item.album}</td>
+                `; // 데이터를 사용하여 HTML 콘텐츠 구성
+                        tableBody.appendChild(tr); // 생성된 tr를 tableBody에 추가
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        loadMelonChart(); // 페이지 로딩 시 멜론차트 로드
+
+        function loadPlaylists() {
+            fetch('/playlists/getAll') // Replace with your actual endpoint
+                .then(response => response.json())
+                .then(playlists => {
+                    const tableBody = document.querySelector('#playlistTable tbody');
+                    if (!tableBody) {
+                        console.error('Table body element not found');
+                        return;
+                    }
+
+                    tableBody.innerHTML = ''; // Clear existing content
+
+                    playlists.forEach(playlist => {
+                        // Check if playlist data is valid
+                        if (playlist && playlist.playlistId && playlist.playlistName) {
+                            const tr = document.createElement('tr');
+                            tr.innerHTML = `
+                        <td>${playlist.playlistName}</td>
+                        <td><a href="/playlists/detail/${playlist.playlistId}">${playlist.playlistName}</a></td>
+                    `;
+
+                            tableBody.appendChild(tr);
+                        } else {
+                            console.error('Invalid playlist data:', playlist);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+        loadPlaylists(); // 페이지 로딩 시 플레이리스트 로드
+
+        // 플레이리스트 생성
+        $("#createPlaylistForm").submit(function(e) {
+            e.preventDefault();
+            var playlistName = $("#playlistName").val();
+
+            $.ajax({
+                url: "/playlists/createplaylist",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ "playlistName": playlistName }),
+                success: function() {
+                    alert("플레이리스트가 성공적으로 생성되었습니다.");
+                    $("#createPlaylistForm").trigger("reset");
+                    window.location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+
+        // 노래 검색
+        $("#searchSongsForm").submit(function(e) {
+            e.preventDefault();
+            var songName = $("#songName").val();
+
+            $.ajax({
+                url: "/songs/search?songName=" + encodeURIComponent(songName),
+                type: "GET",
+                success: function(data) {
+                    console.log("Success:", data); // 여기에서 검색 결과 처리
+                    // 검색 결과를 페이지에 표시하는 로직을 여기에 추가
+                    displaySearchResults(data);
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error:", error);
+                }
+            });
+        });
+
+        // 노래검색 결과테이블
+        function displaySearchResults(data) {
+            // 검색 결과를 표시할 테이블의 tbody 요소를 찾습니다.
+            var resultsContainer = document.getElementById("searchResults");
+
+            // 이전 검색 결과를 지웁니다.
+            resultsContainer.innerHTML = "";
+
+            // 새 검색 결과를 추가합니다.
+            data.forEach(function(song) {
+                var row = document.createElement("tr");
+                row.innerHTML = `<td>${song.title}</td><td>${song.artist}</td>`;
+                resultsContainer.appendChild(row);
+            });
+        }
+
+
+        function loadPlaylistDropdown() {
+            fetch('/playlists/getAll') // 실제 서버의 엔드포인트로 변경
+                .then(response => response.json())
+                .then(playlists => {
+                    const playlistSelect = document.getElementById('playlistSelect');
+                    if (!playlistSelect) {
+                        console.error('Playlist select element not found');
+                        return;
+                    }
+
+                    playlistSelect.innerHTML = ''; // 기존 옵션 초기화
+
+                    // 각 플레이리스트에 대한 옵션을 드롭다운에 추가
+                    playlists.forEach(playlist => {
+                        if (playlist && playlist.id && playlist.name) {
+                            const option = document.createElement('option');
+                            option.value = playlist.id; // 플레이리스트의 식별자
+                            option.textContent = playlist.name; // 플레이리스트의 이름
+                            playlistSelect.appendChild(option);
+                        } else {
+                            console.error('Invalid playlist data:', playlist);
+                        }
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // 페이지 로드 시 드롭다운 메뉴 로드
+        document.addEventListener('DOMContentLoaded', loadPlaylistDropdown);
+
+
+        // 버튼을 찾아 변수에 할당
+        var topButton = document.getElementById("topButton");
+
+        // 버튼 클릭 이벤트 리스너 추가
+        topButton.addEventListener("click", function() {
+            window.scrollTo(0, 0); // 페이지 맨 위로 스크롤
+        });
+    </script>
+</body>
+</html>

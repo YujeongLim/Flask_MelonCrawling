@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.uni.melon.member.model.dao.MemberDAO">
+
+	<resultMap id="loginMemberResultMap" type="com.uni.melon.member.model.dto.MemberDTO">
+		<id column="MEMBER_NO" property="memberNo" />
+		<result column="MEMBER_ID" property="memberId" />
+		<result column="MEMBER_PWD" property="memberPwd" />
+		<result column="MEMBER_NAME" property="memberName" />
+       <collection property = "memberRoleList" resultMap="memberRoleResultMap"/>
+	</resultMap>
+
+    <resultMap id="memberRoleResultMap" type="com.uni.melon.member.model.dto.MemberRoleDTO">
+        <id column="REF_MEMBER_NO" property="memberNo" />
+        <id column="REF_AUTHORITY_CODE" property="authorityCode" /><!-- ID 임 -->
+
+        <association property = "authority" resultMap="authorityResultMap"/>
+
+    </resultMap>
+
+
+    <resultMap id="authorityResultMap" type="com.uni.melon.member.model.dto.AuthorityMemberDTO">
+        <id column="REF_AUTHORITY_CODE2" property="code" />
+        <result column="AUTHORITY_NAME" property="name" />
+        <result column="AUTHORITY_DESC" property="desc" />
+    </resultMap>
+
+
+    <!--<select id="findMemberById" resultMap="loginMemberResultMap" >
+        SELECT 
+               A.MEMBER_PWD 
+          FROM TBL_MEMBER A 
+         WHERE A.MEMBER_ID = #{id} 
+           AND A.STATUS='Y'
+	</select>
+	-->
+	<select id="findMemberById" resultMap="loginMemberResultMap" >
+        SELECT 
+               A.MEMBER_NO
+             , A.MEMBER_ID
+             , A.MEMBER_PWD
+             , A.MEMBER_NAME
+             , B.MEMBER_NO REF_MEMBER_NO
+             , B.AUTHORITY_CODE REF_AUTHORITY_CODE
+             , C.AUTHORITY_CODE REF_AUTHORITY_CODE2
+             , C.AUTHORITY_NAME
+             , C.AUTHORITY_DESC
+        FROM TBL_MEMBER A
+        LEFT JOIN TBL_MEMBER_ROLE B ON(A.MEMBER_NO = B.MEMBER_NO)
+        LEFT JOIN TBL_AUTHORITY C  ON(B.AUTHORITY_CODE = C.AUTHORITY_CODE)
+        WHERE A.MEMBER_ID = #{memberId}
+	</select>
+	
+</mapper>

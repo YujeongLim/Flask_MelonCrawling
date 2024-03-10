@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uni.melon.mapper.PlaylistMapper"><!-- 메퍼위치하고  동일하게 네임스페이스 작성-->
+
+    <resultMap type="com.uni.melon.dto.MelonchartDTO" id="melonchartResultMap">
+        <result property="rank" column="rank"/>
+        <result property="title" column="title"/>
+        <result property="artist" column="artist"/>
+        <result property="album" column="album"/>
+    </resultMap>
+    <resultMap type="com.uni.melon.dto.PlaylistDTO" id="playlistResultMap">
+        <id property="playlistId" column="playlist_id"/>
+        <result property="playlistName" column="playlist_name"/>
+    </resultMap>
+    <resultMap type="com.uni.melon.dto.SongDTO" id="SongResultMap">
+        <id property="songId" column="song_id"/>
+        <result property="title" column="title"/>
+        <result property="artist" column="artist"/>
+    </resultMap>
+
+<!--    <select id="findAllMenu" resultMap="menuResultMap">&lt;!&ndash; 메소드명하고 동일하게&ndash;&gt;-->
+<!--        SELECT-->
+<!--            A.MENU_CODE-->
+<!--             , A.MENU_NAME-->
+<!--             , A.MENU_PRICE-->
+<!--             , A.CATEGORY_CODE-->
+<!--             , A.ORDERABLE_STATUS-->
+<!--        FROM TBL_MENU A-->
+<!--        WHERE A.ORDERABLE_STATUS = 'Y'-->
+<!--        ORDER BY A.MENU_CODE-->
+<!--    </select>-->
+<!--    <select id="findMenuByCode" resultMap="menuResultMap">&lt;!&ndash; 메소드명하고 동일하게&ndash;&gt;-->
+<!--        SELECT-->
+<!--            A.MENU_CODE-->
+<!--             , A.MENU_NAME-->
+<!--             , A.MENU_PRICE-->
+<!--             , A.CATEGORY_CODE-->
+<!--             , A.ORDERABLE_STATUS-->
+<!--        FROM TBL_MENU A-->
+<!--        WHERE A.MENU_CODE = #{code}-->
+<!--    </select>-->
+
+<!--    <select id="findAllCategory" resultMap="categoryResultMap">-->
+<!--        SELECT-->
+<!--            A.CATEGORY_CODE-->
+<!--             , A.CATEGORY_NAME-->
+<!--             , A.REF_CATEGORY_CODE-->
+<!--        FROM TBL_CATEGORY A-->
+<!--        WHERE A.REF_CATEGORY_CODE IS NOT NULL-->
+
+<!--    </select>-->
+
+<!--    <insert id = "registMenu">-->
+<!--        INSERT-->
+<!--        INTO TBL_MENU A-->
+<!--            (-->
+<!--               A.MENU_CODE-->
+<!--             , A.MENU_NAME-->
+<!--             , A.MENU_PRICE-->
+<!--             , A.CATEGORY_CODE-->
+<!--             , A.ORDERABLE_STATUS-->
+<!--        )-->
+<!--        VALUES-->
+<!--            (-->
+<!--            SEQ_MENU_CODE.NEXTVAL-->
+<!--                , #{ name }-->
+<!--                , #{ price }-->
+<!--                , #{ categoryCode }-->
+<!--                , #{ orderableStatus }-->
+<!--            )-->
+
+
+<!--    </insert>-->
+
+</mapper>

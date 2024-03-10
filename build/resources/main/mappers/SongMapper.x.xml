@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.uni.melon.mapper.SongMapper"><!-- 메퍼위치하고  동일하게 네임스페이스 작성-->
+
+    <resultMap type="com.uni.melon.dto.MelonchartDTO" id="melonchartResultMap">
+        <result property="rank" column="rank"/>
+        <result property="title" column="title"/>
+        <result property="artist" column="artist"/>
+        <result property="album" column="album"/>
+    </resultMap>
+    <resultMap type="com.uni.melon.dto.PlaylistDTO" id="playlistResultMap">
+        <id property="playlistId" column="playlist_id"/>
+        <result property="playlistName" column="playlist_name"/>
+    </resultMap>
+    <resultMap type="com.uni.melon.dto.SongDTO" id="SongResultMap">
+        <id property="songId" column="song_id"/>
+        <result property="title" column="title"/>
+        <result property="artist" column="artist"/>
+    </resultMap>
+
+
+</mapper>
