@@ -121,6 +121,7 @@ body{
     background-repeat: no-repeat;
     background-position: right;
     color: #ffffff;
+    padding: 100px 0;
 }
 
 #section02 h2{
@@ -129,9 +130,13 @@ body{
     padding: 50px 0;
 }
 
-.con{
+#section02 .con{
     width: 1200px;
     margin: 0 auto;
+}
+
+#section03 .con{
+    width: 600px;
 }
 
 .h2_1{
@@ -140,6 +145,10 @@ body{
 
 #todayDate{
     float: right;
+}
+
+.sec3-box{
+    float: left;
 }
 
 .table-container {
@@ -153,6 +162,15 @@ body{
     color: #ffffff;
 
 }
+
+#section03 .table-container{
+    float: left;
+    width: 560px;
+    height: 600px;
+    overflow-y: auto;
+    background-color: #ffffff0f;
+}
+
 /* 스크롤바 전체를 스타일링 */
 ::-webkit-scrollbar {
     width: 12px; /* 스크롤바의 너비 */
@@ -182,10 +200,12 @@ body{
     background-repeat: no-repeat;
     background-position: center;
     color: #ffffff;
+    padding: 100px 0;
 }
 
 #section03 .sec3-container{
-    margin: 0 100px;
+    width: 1200px;
+    margin: 0 auto;
     padding: 40px 0;
 }
 

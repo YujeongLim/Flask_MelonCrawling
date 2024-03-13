@@ -55,50 +55,57 @@
                 </table>
             </div>
         </div>
+
+
+
+
+
         <div id="section03">
-            <div class="sec3-container">
-                <div class="con">
-                    <h2>Search Songs</h2>
-                    <form id="searchSongsForm" method="get" class="mb-20">
-                        <input type="text" id="songName" name="songName" placeholder="Song Name">
-                        <button type="submit">Search</button>
-                    </form>
-                </div>
-            <!-- 검색 결과를 표시할 테이블 추가 -->
-                <div class="table-container">
-                    <table id="searchResultsTable">
-                        <thead>
-                        <tr>
-                            <th>Title</th>
-                            <th>Artist</th>
-                        </tr>
-                        </thead>
-                        <tbody id="searchResults"></tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="sec3-container" style="padding-top: 0;">
-                <!-- 플레이리스트 -->
-                <div id="playlistSection">
+            <div class="sec3-container clearfix">
+                <div class="sec3-box">
                     <div class="con">
-                        <h2>Playlists</h2>
-                        <form id="createPlaylistForm" method="post">
-                            <input type="text" id="playlistName" name="playlistName" placeholder="Playlist Name"/>
-                            <button type="submit">Create Playlist</button>
+                        <h2>Search Songs</h2>
+                        <form id="searchSongsForm" method="get" class="mb-20">
+                            <input type="text" id="songName" name="songName" placeholder="Song Name">
+                            <button type="submit">Search</button>
                         </form>
                     </div>
-                    <div class="table-container" style="margin-bottom: 0;">
-                        <table id="playlistTable">
+                <!-- 검색 결과를 표시할 테이블 추가 -->
+                    <div class="table-container" style="margin-right: 40px;">
+                        <table id="searchResultsTable">
                             <thead>
                             <tr>
-                                <th>Playlist Name</th>
-                                <th>Details</th>
+                                <th>Title</th>
+                                <th>Artist</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <!-- Playlist data will be loaded here -->
-                            </tbody>
+                            <tbody id="searchResults"></tbody>
                         </table>
+                    </div>
+                </div>
+                <div class="sec3-box">
+                    <!-- 플레이리스트 -->
+                    <div id="playlistSection">
+                        <div class="con">
+                            <h2>Playlists</h2>
+                            <form id="createPlaylistForm" method="post" style="margin-bottom: 20px">
+                                <input type="text" id="playlistName" name="playlistName" placeholder="Playlist Name"/>
+                                <button type="submit">Create Playlist</button>
+                            </form>
+                        </div>
+                        <div class="table-container" style="margin-bottom: 0;">
+                            <table id="playlistTable">
+                                <thead>
+                                <tr>
+                                    <th>Playlist Name</th>
+                                    <th>Details</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Playlist data will be loaded here -->
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
